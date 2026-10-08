@@ -1,0 +1,20 @@
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Guarda a ordem de chegada dos carros.
+ * O metodo registrarChegada e synchronized para evitar condicao de corrida:
+ * sem isso, dois carros chegando quase juntos poderiam ocupar a mesma posicao.
+ */
+public class Podio {
+    private final List<String> classificacao = new ArrayList<>();
+
+    public synchronized int registrarChegada(String nomeCarro) {
+        classificacao.add(nomeCarro);
+        return classificacao.size();
+    }
+
+    public synchronized List<String> getClassificacao() {
+        return new ArrayList<>(classificacao);
+    }
+}
