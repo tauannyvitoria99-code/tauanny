@@ -1,0 +1,37 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class Corrida {
+    private static final double DISTANCIA_TOTAL = 1000;
+    private static final int NUMERO_DE_CARROS = 5;
+
+    public static void main(String[] args) {
+        Podio podio = new Podio();
+        List<Thread> threads = new ArrayList<>();
+
+        for (int i = 1; i <= NUMERO_DE_CARROS; i++) {
+            Carro carro = new Carro("Carro " + i, DISTANCIA_TOTAL, podio);
+            threads.add(new Thread(carro));
+        }
+
+        System.out.println("=== A CORRIDA VAI COMECAR! ===");
+        for (Thread t : threads) {
+            t.start();
+        }
+
+        // Espera todos terminarem para mostrar o podio final
+        for (Thread t : threads) {
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        System.out.println("\n=== PODIO ===");
+        List<String> ordem = podio.getClassificacao();
+        for (int i = 0; i < ordem.size(); i++) {
+            System.out.println((i + 1) + "o lugar: " + ordem.get(i));
+        }
+    }
+}
